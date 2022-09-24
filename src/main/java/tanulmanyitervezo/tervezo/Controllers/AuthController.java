@@ -8,37 +8,37 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tanulmanyitervezo.tervezo.Models.User;
-import tanulmanyitervezo.tervezo.Repository.UserRepository;
+import tanulmanyitervezo.tervezo.services.UserService;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
     @Autowired
-    UserRepository repository;
-    @Autowired
     AuthenticationManager authenticationManager;
-//
-//    public AuthController(AuthenticationManager authenticationManager){
-//        this.authenticationManager = authenticationManager;
-//    }
+
+    @Autowired
+    UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<HttpStatus> login(@RequestBody User user) throws Exception{
+    public ResponseEntity<Optional<User>> login(@RequestBody User requestUser) throws Exception{
         Authentication authObject;
+        Optional<User> user;
+        ResponseEntity response;
         try {
             authObject = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+                    new UsernamePasswordAuthenticationToken(requestUser.getEmail(), requestUser.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authObject);
+            user = userService.findByEmail(requestUser.getEmail());
+            response=  new ResponseEntity<>(user, HttpStatus.OK);
         }
         catch(BadCredentialsException e) {
-            throw new Exception("NEMJÓ");
+            response=  new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
-
-            return new ResponseEntity<>(HttpStatus.OK);
+        return response;
     }
 }
