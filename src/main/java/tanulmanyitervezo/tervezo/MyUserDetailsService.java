@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 import tanulmanyitervezo.tervezo.Models.User;
 import tanulmanyitervezo.tervezo.Repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
-public class MyUserDeatailsService implements UserDetailsService {
+public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
@@ -20,6 +21,7 @@ public class MyUserDeatailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException{
         Optional<User> user =  userRepository.findByEmail(email);
         user.orElseThrow(()-> new UsernameNotFoundException("Not found: "+email));
-        return user.map(MyUserDetails::new).get();
+        return new org.springframework.security.core.userdetails.User(user.get().getEmail(), user.get().getPassword(),
+                new ArrayList<>());
     }
 }
