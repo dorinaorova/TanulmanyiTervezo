@@ -7,16 +7,30 @@ public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable= false,updatable = false )
-    private int id;
+    private long id;
     private String name;
     private String description;
     private int kredit;
+//    @OneToMany(targetEntity = Period.class)
+//    private List<Period> periods = new ArrayList<Period>();
+//
+//    public List<Period> getPeriods() {
+//        return periods;
+//    }
+//
+//    public void setPeriods(List<Period> periods) {
+//        this.periods = periods;
+//    }
+//
+//    public void addPeriod(Period period){
+//        periods.add(period);
+//    }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

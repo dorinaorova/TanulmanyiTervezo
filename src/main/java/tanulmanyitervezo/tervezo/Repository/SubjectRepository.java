@@ -5,6 +5,6 @@ import tanulmanyitervezo.tervezo.Models.Subject;
 
 import java.util.Optional;
 
-public interface SubjectRepository  extends JpaRepository<Subject, Integer> {
+public interface SubjectRepository  extends JpaRepository<Subject, Long> {
     public Optional<Subject> findByName(String name);
 }

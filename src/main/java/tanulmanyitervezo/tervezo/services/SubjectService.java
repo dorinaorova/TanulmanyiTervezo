@@ -26,11 +26,11 @@ public class SubjectService {
         return repository.save(subject);
     }
 
-    public void deleteSubject(int id){
+    public void deleteSubject(long id){
         repository.deleteById(id);
     }
 
-    public Optional<Subject> findById(int id){
+    public Optional<Subject> findById(long id){
         return repository.findById(id);
     }
 
