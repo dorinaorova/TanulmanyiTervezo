@@ -23,6 +23,8 @@ public class SubjectCotnroller {
     @Autowired
     PeriodService periodService;
 
+    @Autowired
+    HomeworkService homeworkService;
     @GetMapping("/findAll")
     public ResponseEntity<List<Subject>> findAll(){
         List<Subject> subjects = service.findAll();
@@ -50,6 +52,7 @@ public class SubjectCotnroller {
     @DeleteMapping("/delete/{id}")
     public  ResponseEntity deleteSubject(@PathVariable("id") long id){
         service.deleteSubject(id);
+        homeworkService.deleteAllBySubject_id(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -79,4 +82,29 @@ public class SubjectCotnroller {
         }
         return new ResponseEntity<>(periods, HttpStatus.OK);
     }
+    @PostMapping("/addhomework/{id}")
+    public ResponseEntity<Homework> addHomework(@PathVariable("id") long id, @RequestBody Homework homework){
+        Subject subject = service.findById(id).get();
+        homework.setSubject(subject);
+        Homework newHomework = homeworkService.addHomework(homework);
+        return new ResponseEntity<>(newHomework, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/findallhomework/{id}")
+    public ResponseEntity<List<Homework>> findAllHomework(@PathVariable("id") long id){
+        List<Homework> homeworks = homeworkService.findBySubjectId(id);
+        for(Homework homework: homeworks){
+            homework.setSubject(null);
+        }
+        Collections.sort(homeworks);
+        return new ResponseEntity<>(homeworks, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteHomework/{id}")
+    public ResponseEntity deleteHomework(@PathVariable("id") int id){
+        homeworkService.deleteHomework(id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+
 }
