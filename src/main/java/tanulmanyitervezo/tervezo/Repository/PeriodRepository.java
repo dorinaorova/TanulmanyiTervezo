@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface PeriodRepository  extends JpaRepository<Period, Integer> {
     public List<Period> findBySubject_Id(long subject_id);
+
+    public void deleteBySubject_Id(long subject_id);
 }
