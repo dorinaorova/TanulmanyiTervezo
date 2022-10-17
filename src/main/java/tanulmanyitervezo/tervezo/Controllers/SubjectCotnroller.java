@@ -4,10 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tanulmanyitervezo.tervezo.Models.Homework;
 import tanulmanyitervezo.tervezo.Models.Period;
 import tanulmanyitervezo.tervezo.Models.Subject;
+import tanulmanyitervezo.tervezo.Models.ZH;
+import tanulmanyitervezo.tervezo.services.HomeworkService;
 import tanulmanyitervezo.tervezo.services.PeriodService;
 import tanulmanyitervezo.tervezo.services.SubjectService;
+import tanulmanyitervezo.tervezo.services.ZHService;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +26,9 @@ public class SubjectCotnroller {
 
     @Autowired
     PeriodService periodService;
+
+    @Autowired
+    ZHService zhService;
 
     @Autowired
     HomeworkService homeworkService;
@@ -52,6 +59,7 @@ public class SubjectCotnroller {
     @DeleteMapping("/delete/{id}")
     public  ResponseEntity deleteSubject(@PathVariable("id") long id){
         service.deleteSubject(id);
+        zhService.deleteAllBySubject_id(id);
         homeworkService.deleteAllBySubject_id(id);
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -82,6 +90,25 @@ public class SubjectCotnroller {
         }
         return new ResponseEntity<>(periods, HttpStatus.OK);
     }
+
+    @PostMapping("/addzh/{id}")
+    public ResponseEntity<ZH> addZH(@PathVariable("id") long id, @RequestBody ZH zh){
+        Subject subject = service.findById(id).get();
+        zh.setSubject(subject);
+        ZH newZh = zhService.addZH(zh);
+        return new ResponseEntity<>(newZh, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/findallzh/{id}")
+    public ResponseEntity<List<ZH>> findAllZH(@PathVariable("id") long id){
+        List<ZH> zhs = zhService.findBySubjectId(id);
+        for(ZH zh: zhs){
+            zh.setSubject(null);
+        }
+        Collections.sort(zhs);
+        return new ResponseEntity<>(zhs, HttpStatus.OK);
+    }
+
     @PostMapping("/addhomework/{id}")
     public ResponseEntity<Homework> addHomework(@PathVariable("id") long id, @RequestBody Homework homework){
         Subject subject = service.findById(id).get();
