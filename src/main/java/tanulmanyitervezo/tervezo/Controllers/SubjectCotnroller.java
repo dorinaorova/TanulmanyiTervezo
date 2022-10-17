@@ -13,6 +13,7 @@ import tanulmanyitervezo.tervezo.services.PeriodService;
 import tanulmanyitervezo.tervezo.services.SubjectService;
 import tanulmanyitervezo.tervezo.services.ZHService;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,7 @@ public class SubjectCotnroller {
 
     @Autowired
     HomeworkService homeworkService;
+
     @GetMapping("/findAll")
     public ResponseEntity<List<Subject>> findAll(){
         List<Subject> subjects = service.findAll();
@@ -59,6 +61,7 @@ public class SubjectCotnroller {
     @DeleteMapping("/delete/{id}")
     public  ResponseEntity deleteSubject(@PathVariable("id") long id){
         service.deleteSubject(id);
+        periodService.deleteAllBySubjectId(id);
         zhService.deleteAllBySubject_id(id);
         homeworkService.deleteAllBySubject_id(id);
         return new ResponseEntity(HttpStatus.OK);

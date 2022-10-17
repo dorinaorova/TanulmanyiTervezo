@@ -18,6 +18,11 @@ public class PeriodService {
     }
 
     public List<Period> findBySubjectId(long id){
+
         return repository.findBySubject_Id(id);
+    }
+
+    public void deleteAllBySubjectId(long id){
+        repository.deleteBySubject_Id(id);
     }
 }
