@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import tanulmanyitervezo.tervezo.Models.Holiday;
 import tanulmanyitervezo.tervezo.services.HolidayService;
 
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -21,12 +21,13 @@ public class HolidayController {
     @GetMapping("/findall")
     public ResponseEntity<List<Holiday>> findAll(){
         List<Holiday> holidays = service.findallHoliday();
+        Collections.sort(holidays);
         return new ResponseEntity<>(holidays, HttpStatus.OK);
     }
 
-    @GetMapping("/findbydate")
-    public ResponseEntity<List<Holiday>> findByDate(@RequestBody Date date){
-        List<Holiday> holidays = service.findByDate(date);
+    @GetMapping("/findbydate/{id}")
+    public ResponseEntity<List<Holiday>> findByDate(@PathVariable("id") int id){
+        List<Holiday> holidays = service.findByDate(id);
         return new ResponseEntity<>(holidays, HttpStatus.OK);
     }
 
@@ -34,5 +35,10 @@ public class HolidayController {
     public ResponseEntity<Holiday> add(@RequestBody Holiday holiday){
         Holiday newHoliday = service.addHoliday(holiday);
         return new ResponseEntity<>(newHoliday, HttpStatus.CREATED);
+    }
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity delete(@PathVariable("id") int id){
+        service.deleteHoliday(id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

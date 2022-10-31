@@ -9,8 +9,10 @@ public class Holiday implements Comparable<Holiday> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable= false,updatable = false )
     private int id;
+    private String name;
     private String description;
     private Date date;
+    private boolean repeating;
 
     public int getId() {
         return id;
@@ -34,6 +36,22 @@ public class Holiday implements Comparable<Holiday> {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isRepeating() {
+        return repeating;
+    }
+
+    public void setRepeating(boolean repeating) {
+        this.repeating = repeating;
     }
 
     @Override
