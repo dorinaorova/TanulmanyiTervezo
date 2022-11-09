@@ -1,7 +1,6 @@
 package tanulmanyitervezo.tervezo.Models;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 public class Holiday implements Comparable<Holiday> {
@@ -11,7 +10,7 @@ public class Holiday implements Comparable<Holiday> {
     private int id;
     private String name;
     private String description;
-    private Date date;
+    private Long date;
     private boolean repeating;
 
     public int getId() {
@@ -30,11 +29,11 @@ public class Holiday implements Comparable<Holiday> {
         this.description = description;
     }
 
-    public Date getDate() {
+    public Long getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(long date) {
         this.date = date;
     }
 
@@ -56,7 +55,8 @@ public class Holiday implements Comparable<Holiday> {
 
     @Override
     public int compareTo(Holiday holiday){
-        if(getDate() == null || holiday.getDate()==null) return 0;
-        return getDate().compareTo(holiday.getDate());
+        if(getDate()==0 || holiday.getDate()==0) return 0;
+        else if(getDate()<holiday.getDate()) return -1;
+        else return 1;
     }
 }

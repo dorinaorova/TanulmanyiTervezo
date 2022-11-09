@@ -7,10 +7,7 @@ import tanulmanyitervezo.tervezo.Models.Semester;
 import tanulmanyitervezo.tervezo.Repository.HolidayRepository;
 import tanulmanyitervezo.tervezo.Repository.SemesterRepository;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class HolidayService {
@@ -25,7 +22,9 @@ public class HolidayService {
     }
 
     public List<Holiday> findallHoliday(){
-        return repository.findAll();
+        List<Holiday> holidays =  repository.findAll();
+        Collections.sort(holidays);
+        return holidays;
     }
 
     public List<Holiday> findByDate(int id){
@@ -34,20 +33,23 @@ public class HolidayService {
         Date end = semester.getEnd();
         List<Holiday> all = repository.findAll();
         ArrayList<Holiday> holidays = new ArrayList<>();
+
         for (Holiday h: all){
-            if(betweenToDates(h.getDate(), start, end)) holidays.add(h);
+            Date date = new Date(h.getDate());
+            if(betweenToDates(date, start, end)) holidays.add(h);
             else if(h.isRepeating()){
                 Calendar cal = Calendar.getInstance();
-                cal.set(start.getYear(), h.getDate().getMonth(), h.getDate().getDay());
+                cal.set(start.getYear(), date.getMonth(), date.getDay());
                 Date holidayDate = cal.getTime();
                 if(betweenToDates(holidayDate, start, end)) holidays.add(h);
                 else{
-                    cal.set(end.getYear(), h.getDate().getMonth(), h.getDate().getDay());
+                    cal.set(end.getYear(), date.getMonth(), date.getDay());
                     holidayDate = cal.getTime();
                     if(betweenToDates(holidayDate, start, end)) holidays.add(h);
                 }
             }
         }
+        Collections.sort(holidays);
         return holidays;
     }
 
@@ -56,5 +58,22 @@ public class HolidayService {
     private boolean betweenToDates(Date holiday, Date start, Date end){
         if(holiday.after(start) && holiday.before(end)) return true;
         else return false;
+    }
+
+    public boolean isHoliday(long dateTs){
+        List<Holiday> holidays = findallHoliday();
+        Date date = new Date(dateTs);
+        for(Holiday h: holidays){
+            Date holidayDate = new Date(h.getDate());
+            int hm = holidayDate.getMonth();
+            int m = date.getMonth();
+            int hd = holidayDate.getDay();
+            int d = date.getDay();
+            if(date.getDay()==holidayDate.getDay() && date.getMonth() == holidayDate.getMonth()){
+                if(date.getYear()==holidayDate.getYear()) return true;
+                else if(h.isRepeating()) return true;
+            }
+        }
+        return false;
     }
 }

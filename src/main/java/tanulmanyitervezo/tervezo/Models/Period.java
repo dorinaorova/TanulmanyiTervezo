@@ -16,6 +16,7 @@ public class Period implements Serializable {
     private String day;
     private LocalTime start;
     private int length;
+    private String type;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(nullable = false)
@@ -54,5 +55,15 @@ public class Period implements Serializable {
     public void setLength(int length) {
         this.length = length;
     }
+
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
 
 }

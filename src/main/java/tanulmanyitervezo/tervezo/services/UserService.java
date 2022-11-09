@@ -33,4 +33,22 @@ public class UserService {
     public User addUser(User newUser){
         return repository.save(newUser);
     }
+
+    public User updateUser(User updateUser, int id){
+        User user = findById(id).get();
+        if(!updateUser.getName().equals("")){
+            user.setName(updateUser.getName());
+        }
+        if(!updateUser.getEmail().equals("")){
+            user.setEmail(updateUser.getEmail());
+        }
+        if(!updateUser.getNeptun().equals("")){
+            user.setNeptun(updateUser.getNeptun());
+        }
+        if(updateUser.getBirthDate()!=null){
+            user.setBirthDate(updateUser.getBirthDate());
+        }
+
+        return repository.save(user);
+    }
 }

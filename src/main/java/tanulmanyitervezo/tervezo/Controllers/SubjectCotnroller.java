@@ -61,9 +61,6 @@ public class SubjectCotnroller {
     @DeleteMapping("/delete/{id}")
     public  ResponseEntity deleteSubject(@PathVariable("id") long id){
         service.deleteSubject(id);
-        periodService.deleteAllBySubjectId(id);
-        zhService.deleteAllBySubject_id(id);
-        homeworkService.deleteAllBySubject_id(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -93,6 +90,11 @@ public class SubjectCotnroller {
         }
         return new ResponseEntity<>(periods, HttpStatus.OK);
     }
+    @DeleteMapping("/deleteperiod/{id}")
+    public  ResponseEntity deletePeriod(@PathVariable("id") int id){
+        periodService.deletePeriod(id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
     @PostMapping("/addzh/{id}")
     public ResponseEntity<ZH> addZH(@PathVariable("id") long id, @RequestBody ZH zh){
@@ -100,6 +102,11 @@ public class SubjectCotnroller {
         zh.setSubject(subject);
         ZH newZh = zhService.addZH(zh);
         return new ResponseEntity<>(newZh, HttpStatus.CREATED);
+    }
+    @DeleteMapping("/deletezh/{id}")
+    public ResponseEntity deleteZh(@PathVariable("id") int id){
+        zhService.deleteZH(id);
+        return  new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/findallzh/{id}")

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import tanulmanyitervezo.tervezo.Models.Holiday;
 import tanulmanyitervezo.tervezo.services.HolidayService;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -21,7 +20,6 @@ public class HolidayController {
     @GetMapping("/findall")
     public ResponseEntity<List<Holiday>> findAll(){
         List<Holiday> holidays = service.findallHoliday();
-        Collections.sort(holidays);
         return new ResponseEntity<>(holidays, HttpStatus.OK);
     }
 
@@ -40,5 +38,10 @@ public class HolidayController {
     public ResponseEntity delete(@PathVariable("id") int id){
         service.deleteHoliday(id);
         return new ResponseEntity(HttpStatus.OK);
+    }
+    @GetMapping("/isholiday/{date}")
+    public ResponseEntity<Boolean> isHoliday(@PathVariable("date") long date){
+        Boolean result = service.isHoliday(date);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

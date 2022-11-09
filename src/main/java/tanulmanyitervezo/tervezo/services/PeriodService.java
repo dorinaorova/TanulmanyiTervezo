@@ -22,6 +22,10 @@ public class PeriodService {
         return repository.findBySubject_Id(id);
     }
 
+    public void deletePeriod(int id){
+        repository.deleteById(id);
+    }
+
     public void deleteAllBySubjectId(long id){
         repository.deleteBySubject_Id(id);
     }

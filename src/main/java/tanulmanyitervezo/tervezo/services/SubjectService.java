@@ -14,6 +14,15 @@ public class SubjectService {
     @Autowired
     SubjectRepository repository;
 
+    @Autowired
+    PeriodService periodService;
+
+    @Autowired
+    ZHService zhService;
+
+    @Autowired
+    HomeworkService homeworkService;
+
     public List<Subject> findAll(){
         return repository.findAll();
     }
@@ -27,6 +36,9 @@ public class SubjectService {
     }
 
     public void deleteSubject(long id){
+        periodService.deleteAllBySubjectId(id);
+        zhService.deleteAllBySubject_id(id);
+        homeworkService.deleteAllBySubject_id(id);
         repository.deleteById(id);
     }
 
