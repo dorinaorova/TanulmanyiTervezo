@@ -2,11 +2,11 @@ package tanulmanyitervezo.tervezo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tanulmanyitervezo.tervezo.Models.Semester;
-import tanulmanyitervezo.tervezo.Models.StudentsSubject;
-import tanulmanyitervezo.tervezo.Models.Subject;
-import tanulmanyitervezo.tervezo.Models.User;
-import tanulmanyitervezo.tervezo.Repository.StudentsSubjectRepository;
+import tanulmanyitervezo.tervezo.model.Semester;
+import tanulmanyitervezo.tervezo.model.StudentsSubject;
+import tanulmanyitervezo.tervezo.model.Subject;
+import tanulmanyitervezo.tervezo.model.User;
+import tanulmanyitervezo.tervezo.repository.StudentsSubjectRepository;
 
 import java.util.ArrayList;
 import java.util.List;

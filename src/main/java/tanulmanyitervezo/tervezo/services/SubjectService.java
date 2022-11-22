@@ -2,8 +2,8 @@ package tanulmanyitervezo.tervezo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tanulmanyitervezo.tervezo.Models.Subject;
-import tanulmanyitervezo.tervezo.Repository.SubjectRepository;
+import tanulmanyitervezo.tervezo.model.Subject;
+import tanulmanyitervezo.tervezo.repository.SubjectRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,10 +36,10 @@ public class SubjectService {
     }
 
     public void deleteSubject(long id){
+        repository.deleteById(id);
         periodService.deleteAllBySubjectId(id);
         zhService.deleteAllBySubject_id(id);
         homeworkService.deleteAllBySubject_id(id);
-        repository.deleteById(id);
     }
 
     public Optional<Subject> findById(long id){

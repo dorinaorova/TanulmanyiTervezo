@@ -2,10 +2,10 @@ package tanulmanyitervezo.tervezo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tanulmanyitervezo.tervezo.Models.Holiday;
-import tanulmanyitervezo.tervezo.Models.Semester;
-import tanulmanyitervezo.tervezo.Repository.HolidayRepository;
-import tanulmanyitervezo.tervezo.Repository.SemesterRepository;
+import tanulmanyitervezo.tervezo.model.Holiday;
+import tanulmanyitervezo.tervezo.model.Semester;
+import tanulmanyitervezo.tervezo.repository.HolidayRepository;
+import tanulmanyitervezo.tervezo.repository.SemesterRepository;
 
 import java.util.*;
 
@@ -29,8 +29,8 @@ public class HolidayService {
 
     public List<Holiday> findByDate(int id){
         Semester semester = semesterRepository.findById(id).get();
-        Date start = semester.getStart();
-        Date end = semester.getEnd();
+        Date start = new Date(semester.getStart());
+        Date end = new Date(semester.getEnd());
         List<Holiday> all = repository.findAll();
         ArrayList<Holiday> holidays = new ArrayList<>();
 
@@ -65,11 +65,7 @@ public class HolidayService {
         Date date = new Date(dateTs);
         for(Holiday h: holidays){
             Date holidayDate = new Date(h.getDate());
-            int hm = holidayDate.getMonth();
-            int m = date.getMonth();
-            int hd = holidayDate.getDay();
-            int d = date.getDay();
-            if(date.getDay()==holidayDate.getDay() && date.getMonth() == holidayDate.getMonth()){
+            if(date.getDate()==holidayDate.getDate() && date.getMonth() == holidayDate.getMonth()){
                 if(date.getYear()==holidayDate.getYear()) return true;
                 else if(h.isRepeating()) return true;
             }

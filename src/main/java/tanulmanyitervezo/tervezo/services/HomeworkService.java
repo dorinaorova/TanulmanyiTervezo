@@ -2,8 +2,8 @@ package tanulmanyitervezo.tervezo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tanulmanyitervezo.tervezo.Models.Homework;
-import tanulmanyitervezo.tervezo.Repository.HomeworkRepository;
+import tanulmanyitervezo.tervezo.model.Homework;
+import tanulmanyitervezo.tervezo.repository.HomeworkRepository;
 
 import java.util.List;
 

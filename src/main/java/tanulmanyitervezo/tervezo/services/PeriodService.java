@@ -2,8 +2,8 @@ package tanulmanyitervezo.tervezo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tanulmanyitervezo.tervezo.Models.Period;
-import tanulmanyitervezo.tervezo.Repository.PeriodRepository;
+import tanulmanyitervezo.tervezo.model.Period;
+import tanulmanyitervezo.tervezo.repository.PeriodRepository;
 
 import java.util.List;
 
