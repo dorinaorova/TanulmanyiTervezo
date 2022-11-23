@@ -12,6 +12,7 @@ public class Task implements Comparable<Task> {
     @Column(nullable= false,updatable = false )
     private int id;
     private String name;
+    @Lob
     private String description;
     private Long date;
     private boolean done;

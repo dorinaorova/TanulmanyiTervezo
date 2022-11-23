@@ -66,12 +66,11 @@ public class SubjectController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Subject> updateSubject(@PathVariable("id") long id, @RequestBody Subject subj){
-        Subject subject = service.findById(id).get();
-        if(subj.getName()!=null) subject.setName(subj.getName());
-        if(subj.getDescription()!=null) subject.setDescription(subj.getDescription());
-        if(subj.getKredit()>0) subject.setKredit(subj.getKredit());
-        Subject updateSubj = service.updateSubject(subject);
-        return new ResponseEntity<>(updateSubj, HttpStatus.OK);
+        Subject updateSubj = service.updateSubject(id, subj);
+        if(updateSubj!=null) {
+            return new ResponseEntity<>(updateSubj, HttpStatus.OK);
+        }
+        else return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/addperiod/{id}")
@@ -79,7 +78,7 @@ public class SubjectController {
         Subject subject = service.findById(id).get();
         period.setSubject(subject);
         Period newPeriod = periodService.addPeriod(period);
-        return new ResponseEntity<Period>(newPeriod, HttpStatus.CREATED);
+        return new ResponseEntity<>(newPeriod, HttpStatus.CREATED);
     }
 
     @GetMapping("/findallperiods/{id}")

@@ -13,6 +13,7 @@ public class Homework implements Comparable<Homework> {
     private int id;
     private Long date;
     private int maxPoints;
+    @Lob
     private String description;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(nullable = false)

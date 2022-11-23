@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class UserController {
 
     @Autowired
@@ -28,16 +28,6 @@ public class UserController {
     public ResponseEntity<Optional<User>> findUserById(@PathVariable("id") int id){
         Optional<User> user = service.findById(id);
         return  new ResponseEntity<>(user, HttpStatus.OK);
-    }
-
-    @PostMapping("/add")
-    public ResponseEntity<User> addUser(@RequestBody User newUser){
-        if(newUser.getRoles()==null){
-            newUser.setRoles("ROLE_USER");
-        }
-        newUser.setActive(true);
-        User user = service.addUser(newUser);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")

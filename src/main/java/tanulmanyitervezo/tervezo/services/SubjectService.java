@@ -37,16 +37,20 @@ public class SubjectService {
 
     public void deleteSubject(long id){
         repository.deleteById(id);
-        periodService.deleteAllBySubjectId(id);
-        zhService.deleteAllBySubject_id(id);
-        homeworkService.deleteAllBySubject_id(id);
     }
 
     public Optional<Subject> findById(long id){
         return repository.findById(id);
     }
 
-    public Subject updateSubject(Subject subject){
-        return repository.save(subject);
+    public Subject updateSubject(long id, Subject subj){
+        Optional<Subject> subject = repository.findById(id);
+        if(subject.isPresent()){
+            if(subj.getName()!=null) subject.get().setName(subj.getName());
+            if(subj.getDescription()!=null) subject.get().setDescription(subj.getDescription());
+            if(subj.getKredit()>0) subject.get().setKredit(subj.getKredit());
+            return repository.save(subject.get());
+        }
+        else return null;
     }
 }

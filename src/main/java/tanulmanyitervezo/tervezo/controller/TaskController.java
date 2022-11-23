@@ -8,6 +8,7 @@ import tanulmanyitervezo.tervezo.model.Task;
 import tanulmanyitervezo.tervezo.services.TaskService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/task")
@@ -30,8 +31,9 @@ public class TaskController {
 
     @GetMapping("/findbyid/{id}")
     public ResponseEntity<Task> findById(@PathVariable("id") int id){
-        Task task = service.findById(id);
-        return  new ResponseEntity<>(task, HttpStatus.OK);
+        Optional<Task> task = service.findById(id);
+        return task.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+
     }
 
     @GetMapping("/findallbyuser/done/{id}")
@@ -49,13 +51,19 @@ public class TaskController {
     @PutMapping("/update/{id}")
     public ResponseEntity<Task> update(@PathVariable("id") int id, @RequestBody Task task){
         Task updatedTask = service.updateTask(task, id);
-        return new ResponseEntity<>(updatedTask, HttpStatus.OK);
+        if(updatedTask!=null){
+            return new ResponseEntity<>(updatedTask, HttpStatus.OK);
+        }
+        else return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/setdone/{id}")
     public ResponseEntity<Task> setDone(@PathVariable("id") int id){
         Task updatedTask = service.setDoneTask(id);
-        return new ResponseEntity<>(updatedTask, HttpStatus.OK);
+        if(updatedTask!=null){
+            return new ResponseEntity<>(updatedTask, HttpStatus.OK);
+        }
+        else return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/delete/{id}")

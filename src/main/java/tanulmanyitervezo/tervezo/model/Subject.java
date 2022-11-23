@@ -9,6 +9,7 @@ public class Subject {
     @Column(nullable= false,updatable = false )
     private long id;
     private String name;
+    @Lob
     private String description;
     private int kredit;
 //    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)

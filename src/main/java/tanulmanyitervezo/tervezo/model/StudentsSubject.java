@@ -1,5 +1,8 @@
 package tanulmanyitervezo.tervezo.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +13,14 @@ public class StudentsSubject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable= false,updatable = false )
     private int id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User student;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Subject> subject;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Semester semester;
 
     public StudentsSubject(){

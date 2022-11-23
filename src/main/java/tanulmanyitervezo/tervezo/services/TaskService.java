@@ -9,6 +9,7 @@ import tanulmanyitervezo.tervezo.repository.TaskRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskService {
@@ -25,8 +26,8 @@ public class TaskService {
         return repository.save(task);
     }
 
-    public Task findById(int id){
-        Task task = repository.findById(id).get();
+    public Optional<Task> findById(int id){
+        Optional<Task> task = repository.findById(id);
         return task;
     }
 
@@ -56,17 +57,23 @@ public class TaskService {
     }
 
     public Task updateTask(Task task, int id){
-        Task t= repository.findById(id).get();
-        if(task.getDate()!=0) t.setDate(task.getDate());
-        if(task.getDescription()!=null && !task.getDescription().equals("") ) t.setDescription(task.getDescription());
-        if(task.getName()!=null && !task.getName().equals("")) t.setName(task.getName());
-        return repository.save(t);
+        Optional<Task> t= repository.findById(id);
+        if(t.isPresent()){
+            if(task.getDate()!=0) t.get().setDate(task.getDate());
+            if(task.getDescription()!=null && !task.getDescription().equals("") ) t.get().setDescription(task.getDescription());
+            if(task.getName()!=null && !task.getName().equals("")) t.get().setName(task.getName());
+            return repository.save(t.get());
+        }
+        else return null;
     }
 
     public Task setDoneTask(int id){
-        Task task = repository.findById(id).get();
-        task.setDone(true);
-        return repository.save(task);
+        Optional<Task> task = repository.findById(id);
+        if(task.isPresent()){
+            task.get().setDone(true);
+            return repository.save(task.get());
+        }
+        return null;
     }
 
     public void deleteTask(int id){

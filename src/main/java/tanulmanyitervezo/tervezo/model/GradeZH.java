@@ -12,6 +12,7 @@ public class GradeZH {
     @Column(nullable= false,updatable = false )
     public int id;
     @ManyToOne(fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
     @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)

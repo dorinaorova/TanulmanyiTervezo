@@ -11,19 +11,21 @@ public class User {
     @Column(unique = true)
     private String email;
     private  String password;
-    private boolean active;
     @Column(nullable= false,updatable = false )
     private String roles;
     private String name;
     private Long birthDate;
     private String neptun;
 
-    public boolean isActive() {
-        return active;
-    }
+    public User(){}
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public User(   String name, String email, String password, String neptun, Long birthDate, String roles){
+        this.name=name;
+        this.email=email;
+        this.password=password;
+        this.neptun=neptun;
+        this.birthDate=birthDate;
+        this.roles=roles;
     }
 
     public String getRoles() {
