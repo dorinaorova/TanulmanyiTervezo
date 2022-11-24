@@ -39,22 +39,24 @@ public class UserService {
         return repository.save(user);
     }
 
-    public User updateUser(User updateUser, int id){
-        User user = findById(id).get();
-        if(!updateUser.getName().equals("")){
-            user.setName(updateUser.getName());
+    public User updateUser(User updateUser, int id) throws Exception {
+        Optional<User> user = findById(id);
+        if(user.isPresent()) {
+            if (!updateUser.getName().equals("")) {
+                user.get().setName(updateUser.getName());
+            }
+            if (!updateUser.getEmail().equals("")) {
+                user.get().setEmail(updateUser.getEmail());
+            }
+            if (!updateUser.getNeptun().equals("")) {
+                user.get().setNeptun(updateUser.getNeptun());
+            }
+            if (updateUser.getBirthDate() != null) {
+                user.get().setBirthDate(updateUser.getBirthDate());
+            }
+            return repository.save(user.get());
         }
-        if(!updateUser.getEmail().equals("")){
-            user.setEmail(updateUser.getEmail());
-        }
-        if(!updateUser.getNeptun().equals("")){
-            user.setNeptun(updateUser.getNeptun());
-        }
-        if(updateUser.getBirthDate()!=null){
-            user.setBirthDate(updateUser.getBirthDate());
-        }
-
-        return repository.save(user);
+        else throw new Exception("NOT FOUND");
     }
 
     public boolean existsByEmail(User user){

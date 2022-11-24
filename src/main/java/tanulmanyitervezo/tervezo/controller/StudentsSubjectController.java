@@ -32,8 +32,12 @@ public class StudentsSubjectController {
 
     @PostMapping("/add/{id}")
     public ResponseEntity<StudentsSubject> add(@RequestBody Subject subject, @PathVariable("id") int studentId){
-        StudentsSubject newStudentsSubject = service.add(subject, studentId);
-        return  new ResponseEntity<>(newStudentsSubject, HttpStatus.CREATED);
+        try {
+            StudentsSubject newStudentsSubject = service.add(subject, studentId);
+            return new ResponseEntity<>(newStudentsSubject, HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

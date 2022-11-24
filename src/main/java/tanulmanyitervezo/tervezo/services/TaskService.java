@@ -19,11 +19,14 @@ public class TaskService {
     @Autowired
     UserService userService;
 
-    public Task addTask(Task task, int id){
-        User user = userService.findById(id).get();
-        task.setDone(false);
-        task.setUser(user);
-        return repository.save(task);
+    public Task addTask(Task task, int id) throws Exception {
+        Optional<User> user = userService.findById(id);
+        if(user.isPresent()) {
+            task.setDone(false);
+            task.setUser(user.get());
+            return repository.save(task);
+        }
+        else throw new Exception("NOT FOUND");
     }
 
     public Optional<Task> findById(int id){
@@ -56,7 +59,7 @@ public class TaskService {
         return undone;
     }
 
-    public Task updateTask(Task task, int id){
+    public Task updateTask(Task task, int id) throws Exception {
         Optional<Task> t= repository.findById(id);
         if(t.isPresent()){
             if(task.getDate()!=0) t.get().setDate(task.getDate());
@@ -64,20 +67,24 @@ public class TaskService {
             if(task.getName()!=null && !task.getName().equals("")) t.get().setName(task.getName());
             return repository.save(t.get());
         }
-        else return null;
+        else throw new Exception("NOT FOUND");
     }
 
-    public Task setDoneTask(int id){
+    public Task setDoneTask(int id) throws Exception {
         Optional<Task> task = repository.findById(id);
         if(task.isPresent()){
             task.get().setDone(true);
             return repository.save(task.get());
         }
-        return null;
+        else throw new Exception("NOT FOUND");
     }
 
-    public void deleteTask(int id){
-        repository.deleteById(id);
+    public void deleteTask(int id) throws Exception {
+        try {
+            repository.deleteById(id);
+        }catch (Exception e){
+            throw new Exception("NOT FOUND");
+        }
     }
 
 }

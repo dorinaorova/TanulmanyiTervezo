@@ -8,8 +8,8 @@ import tanulmanyitervezo.tervezo.model.Subject;
 import tanulmanyitervezo.tervezo.model.User;
 import tanulmanyitervezo.tervezo.repository.StudentsSubjectRepository;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentsSubjectService {
@@ -23,19 +23,7 @@ public class StudentsSubjectService {
     @Autowired
     SemesterService semesterService;
 
-    public List<StudentsSubject> findAll(){
-        return  repository.findAll();
-    }
-
-    public List<Subject> findByStudentId(int id){
-        List<StudentsSubject> studentsSubjects = repository.findAllByStudent_Id(id);
-        ArrayList<Subject> subjects = new ArrayList<>();
-        for(StudentsSubject s: studentsSubjects){
-            subjects.addAll(s.getSubject());
-        }
-        return subjects;
-    }
-    public StudentsSubject add(Subject subject,int id){
+    public StudentsSubject add(Subject subject,int id) throws Exception {
         boolean findSS = false;
         StudentsSubject newStudentSubject = new StudentsSubject();
         List<StudentsSubject> studentsSubjects = repository.findAllByStudent_Id(id);
@@ -43,8 +31,9 @@ public class StudentsSubjectService {
             if(ss.getSemester().isCurrent()){
                 boolean subjectExist=false;
                 for(Subject s: ss.getSubject()){
-                    if(s.getId()==subject.getId()){
-                        subjectExist=true;
+                    if (s.getId() == subject.getId()) {
+                        subjectExist = true;
+                        break;
                     }
                 }
                 if(!subjectExist) {
@@ -56,12 +45,15 @@ public class StudentsSubjectService {
             }
         }
         if(!findSS){
-            User student = userService.findById(id).get();
-            Semester semester = semesterService.findCurrent();
-            newStudentSubject.setSemester(semester);
-            newStudentSubject.setStudent(student);
-            newStudentSubject.addSubject(subject);
-            repository.save(newStudentSubject);
+            Optional<User> student = userService.findById(id);
+            if(student.isPresent()) {
+                Semester semester = semesterService.findCurrent();
+                newStudentSubject.setSemester(semester);
+                newStudentSubject.setStudent(student.get());
+                newStudentSubject.addSubject(subject);
+                repository.save(newStudentSubject);
+            }
+            else throw new Exception("NOT FOUND");
         }
         return newStudentSubject;
     }

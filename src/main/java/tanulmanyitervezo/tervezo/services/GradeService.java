@@ -9,6 +9,7 @@ import tanulmanyitervezo.tervezo.repository.GradeZHRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GradeService {
@@ -55,28 +56,40 @@ public class GradeService {
         return null;
     }
 
-    public GradeZH addGrade_ZH(GradeZH grade, int userId){
-        User user =  userService.findById(userId).get();
-        grade.setUser(user);
-        return gradeZHRepository.save(grade);
+    public GradeZH addGrade_ZH(GradeZH grade, int userId) throws Exception {
+        Optional<User> user =  userService.findById(userId);
+        if(user.isPresent()) {
+            grade.setUser(user.get());
+            return gradeZHRepository.save(grade);
+        }
+        else throw new Exception("NOT FOUND");
     }
 
-    public GradeZH updateGrade_ZH(GradeZH g, int id){
-        GradeZH grade = gradeZHRepository.findById(id).get();
-        grade.setPoints(g.getPoints());
-        return gradeZHRepository.save(grade);
+    public GradeZH updateGrade_ZH(GradeZH g, int id) throws Exception {
+        Optional<GradeZH> grade = gradeZHRepository.findById(id);
+        if(grade.isPresent()) {
+            grade.get().setPoints(g.getPoints());
+            return gradeZHRepository.save(grade.get());
+        }
+        else throw new Exception("NOT FOUND");
     }
 
-    public GradeHomework addGrade_Homework(GradeHomework grade, int userId){
-        User user =  userService.findById(userId).get();
-        grade.setUser(user);
-        return gradeHomeworkRepository.save(grade);
+    public GradeHomework addGrade_Homework(GradeHomework grade, int userId) throws Exception {
+        Optional<User> user =  userService.findById(userId);
+        if(user.isPresent()) {
+            grade.setUser(user.get());
+            return gradeHomeworkRepository.save(grade);
+        }
+        else throw new Exception("NOT FOUND");
     }
 
-    public GradeHomework updateGrade_Homework(GradeHomework g, int id){
-        GradeHomework grade = gradeHomeworkRepository.findById(id).get();
-        grade.setPoints(g.getPoints());
-        return gradeHomeworkRepository.save(grade);
+    public GradeHomework updateGrade_Homework(GradeHomework g, int id) throws Exception {
+        Optional<GradeHomework> grade = gradeHomeworkRepository.findById(id);
+        if(grade.isPresent()) {
+            grade.get().setPoints(g.getPoints());
+            return gradeHomeworkRepository.save(grade.get());
+        }
+        else throw new Exception("NOT FOUND");
     }
 
     public List<GradeResponseModel> findAllByUser_id(int userId, int semesterId){

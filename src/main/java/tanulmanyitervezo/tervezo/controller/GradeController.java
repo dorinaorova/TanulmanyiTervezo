@@ -26,25 +26,41 @@ public class GradeController {
 
     @PostMapping("/addgrade/zh/{userId}")
     public ResponseEntity<GradeZH> addGrade_ZH(@RequestBody GradeZH grade, @PathVariable("userId") int id){
-        GradeZH newGrade = service.addGrade_ZH(grade, id);
-        return  new ResponseEntity<>(newGrade, HttpStatus.CREATED);
+        try {
+            GradeZH newGrade = service.addGrade_ZH(grade, id);
+            return new ResponseEntity<>(newGrade, HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/updategrade/zh/{id}")
     public ResponseEntity<GradeZH> updateGrade_ZH(@RequestBody GradeZH grade, @PathVariable("id") int id){
-        GradeZH updatedGrade = service.updateGrade_ZH(grade, id);
-        return  new ResponseEntity<>(updatedGrade, HttpStatus.OK);
+        try{
+            GradeZH updatedGrade = service.updateGrade_ZH(grade, id);
+            return  new ResponseEntity<>(updatedGrade, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/addgrade/homework/{userId}")
     public ResponseEntity<GradeHomework> addGrade_Homework(@RequestBody GradeHomework grade, @PathVariable("userId") int id){
-        GradeHomework newGrade = service.addGrade_Homework(grade, id);
-        return  new ResponseEntity<>(newGrade, HttpStatus.CREATED);
+        try{
+            GradeHomework newGrade = service.addGrade_Homework(grade, id);
+            return  new ResponseEntity<>(newGrade, HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/updategrade/homework/{id}")
     public ResponseEntity<GradeHomework> updateGrade_Homework(@RequestBody GradeHomework grade, @PathVariable("id") int id){
-        GradeHomework updatedGrade = service.updateGrade_Homework(grade, id);
-        return  new ResponseEntity<>(updatedGrade, HttpStatus.OK);
+        try{
+            GradeHomework updatedGrade = service.updateGrade_Homework(grade, id);
+            return  new ResponseEntity<>(updatedGrade, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

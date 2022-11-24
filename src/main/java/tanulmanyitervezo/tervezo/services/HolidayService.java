@@ -53,7 +53,13 @@ public class HolidayService {
         return holidays;
     }
 
-    public void deleteHoliday(int id){repository.deleteById(id);}
+    public void deleteHoliday(int id) throws Exception {
+        try {
+            repository.deleteById(id);
+        }catch (Exception e){
+            throw new Exception("NOT FOUND");
+        }
+    }
 
     private boolean betweenToDates(Date holiday, Date start, Date end){
         if(holiday.after(start) && holiday.before(end)) return true;

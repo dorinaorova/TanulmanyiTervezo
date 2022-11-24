@@ -66,7 +66,11 @@ public class DatabaseSeed implements CommandLineRunner {
         else if(semesterService.findCurrent()==null){
             List<Semester> semesters = semesterRepository.findAll();
             Collections.sort(semesters);
-            semesterService.setCurrent(semesters.get(0).getId());
+            try {
+                semesterService.setCurrent(semesters.get(0).getId());
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }
     }
 }

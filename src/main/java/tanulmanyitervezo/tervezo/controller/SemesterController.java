@@ -10,6 +10,7 @@ import tanulmanyitervezo.tervezo.services.SemesterService;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/semester")
@@ -40,8 +41,12 @@ public class SemesterController {
 
     @PutMapping("/setcurrent/{id}")
     public ResponseEntity<Semester> setCurrent(@PathVariable("id") int id){
-        Semester current = service.setCurrent(id);
-        return new ResponseEntity<>(current, HttpStatus.OK);
+        try {
+            Semester current = service.setCurrent(id);
+            return new ResponseEntity<>(current, HttpStatus.OK);
+        }catch (Exception e){
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/findnext/{id}")
@@ -57,15 +62,19 @@ public class SemesterController {
     }
 
     @GetMapping("/findbyid/{id}")
-    public ResponseEntity<Semester> findById(@PathVariable("id") int id){
-        Semester semester = service.findById(id);
+    public ResponseEntity<Optional<Semester>> findById(@PathVariable("id") int id){
+        Optional<Semester> semester = service.findById(id);
         return new ResponseEntity<>(semester, HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Semester> update(@PathVariable("id") int id, @RequestBody Semester semester){
-        Semester updated = service.update(id, semester);
-        return  new ResponseEntity<>(updated, HttpStatus.OK);
+        try{
+            Semester updated = service.update(id, semester);
+            return  new ResponseEntity<>(updated, HttpStatus.OK);
+        }catch (Exception e){
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

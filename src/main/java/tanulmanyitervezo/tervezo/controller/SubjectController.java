@@ -56,29 +56,39 @@ public class SubjectController {
     public  ResponseEntity<Subject> addSubject(@RequestBody Subject newSubject){
         Subject subject = service.addSubject(newSubject);
         return new ResponseEntity<>(subject, HttpStatus.CREATED);
+
     }
 
     @DeleteMapping("/delete/{id}")
     public  ResponseEntity deleteSubject(@PathVariable("id") long id){
-        service.deleteSubject(id);
-        return new ResponseEntity(HttpStatus.OK);
+        try{
+            service.deleteSubject(id);
+            return new ResponseEntity(HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Subject> updateSubject(@PathVariable("id") long id, @RequestBody Subject subj){
-        Subject updateSubj = service.updateSubject(id, subj);
-        if(updateSubj!=null) {
+        try {
+            Subject updateSubj = service.updateSubject(id, subj);
             return new ResponseEntity<>(updateSubj, HttpStatus.OK);
         }
-        else return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        catch(Exception e){
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/addperiod/{id}")
-    public ResponseEntity<Period> addPeriod(@PathVariable("id") long id, @RequestBody Period period){
-        Subject subject = service.findById(id).get();
-        period.setSubject(subject);
-        Period newPeriod = periodService.addPeriod(period);
-        return new ResponseEntity<>(newPeriod, HttpStatus.CREATED);
+    public ResponseEntity<Period> addPeriod(@PathVariable("id") long id, @RequestBody Period period) {
+         try{
+            Period newPeriod = periodService.addPeriod(period, id);
+            return new ResponseEntity<>(newPeriod, HttpStatus.CREATED);
+        }catch (Exception e){
+             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+         }
     }
 
     @GetMapping("/findallperiods/{id}")
@@ -91,21 +101,32 @@ public class SubjectController {
     }
     @DeleteMapping("/deleteperiod/{id}")
     public  ResponseEntity deletePeriod(@PathVariable("id") int id){
-        periodService.deletePeriod(id);
-        return new ResponseEntity(HttpStatus.OK);
+        try {
+            periodService.deletePeriod(id);
+            return new ResponseEntity(HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/addzh/{id}")
     public ResponseEntity<ZH> addZH(@PathVariable("id") long id, @RequestBody ZH zh){
-        Subject subject = service.findById(id).get();
-        zh.setSubject(subject);
-        ZH newZh = zhService.addZH(zh);
-        return new ResponseEntity<>(newZh, HttpStatus.CREATED);
+        try {
+            ZH newZh = zhService.addZH(zh, id);
+            return new ResponseEntity<>(newZh, HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
+
     @DeleteMapping("/deletezh/{id}")
     public ResponseEntity deleteZh(@PathVariable("id") int id){
-        zhService.deleteZH(id);
-        return  new ResponseEntity(HttpStatus.OK);
+        try {
+            zhService.deleteZH(id);
+            return new ResponseEntity(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/findallzhforsubject/{id}")
@@ -130,10 +151,12 @@ public class SubjectController {
 
     @PostMapping("/addhomework/{id}")
     public ResponseEntity<Homework> addHomework(@PathVariable("id") long id, @RequestBody Homework homework){
-        Subject subject = service.findById(id).get();
-        homework.setSubject(subject);
-        Homework newHomework = homeworkService.addHomework(homework);
-        return new ResponseEntity<>(newHomework, HttpStatus.CREATED);
+        try {
+            Homework newHomework = homeworkService.addHomework(id, homework);
+            return new ResponseEntity<>(newHomework, HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/findallhomework/{id}")
@@ -148,8 +171,12 @@ public class SubjectController {
 
     @DeleteMapping("/deleteHomework/{id}")
     public ResponseEntity deleteHomework(@PathVariable("id") int id){
-        homeworkService.deleteHomework(id);
-        return new ResponseEntity(HttpStatus.OK);
+        try{
+            homeworkService.deleteHomework(id);
+            return new ResponseEntity(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
 

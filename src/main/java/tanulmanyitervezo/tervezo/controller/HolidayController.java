@@ -36,8 +36,12 @@ public class HolidayController {
     }
     @DeleteMapping("delete/{id}")
     public ResponseEntity delete(@PathVariable("id") int id){
-        service.deleteHoliday(id);
-        return new ResponseEntity(HttpStatus.OK);
+        try{
+            service.deleteHoliday(id);
+            return new ResponseEntity(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
     @GetMapping("/isholiday/{date}")
     public ResponseEntity<Boolean> isHoliday(@PathVariable("date") long date){

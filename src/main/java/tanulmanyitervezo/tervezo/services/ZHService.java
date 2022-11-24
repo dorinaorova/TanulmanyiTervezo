@@ -8,6 +8,7 @@ import tanulmanyitervezo.tervezo.repository.ZHRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ZHService  {
@@ -16,10 +17,18 @@ public class ZHService  {
     private ZHRepository repository;
 
     @Autowired
+    private SubjectService subjectService;
+
+    @Autowired
     private StudentsSubjectService studentsSubjectService;
 
-    public ZH addZH(ZH zh){
-        return repository.save(zh);
+    public ZH addZH(ZH zh, long subjectId) throws Exception {
+        Optional<Subject> subject = subjectService.findById(subjectId);
+        if(subject.isPresent()){
+            zh.setSubject(subject.get());
+            return repository.save(zh);
+        }
+        else throw new Exception("NOT FOUND");
     }
 
     public List<ZH> findBySubjectId(long id){
@@ -38,11 +47,12 @@ public class ZHService  {
         return zhList;
     }
 
-    public void deleteZH(int id){
-        repository.deleteById(id);
+    public void deleteZH(int id) throws Exception {
+        try {
+            repository.deleteById(id);
+        }catch (Exception e){
+            throw new Exception("NOT FOUND");
+        }
     }
 
-    public void deleteAllBySubject_id(long id){
-        repository.deleteBySubject_Id(id);
-    }
 }
