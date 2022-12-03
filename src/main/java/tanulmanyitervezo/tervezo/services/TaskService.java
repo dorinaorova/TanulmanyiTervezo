@@ -29,9 +29,13 @@ public class TaskService {
         else throw new Exception("NOT FOUND");
     }
 
-    public Optional<Task> findById(int id){
+    public Optional<Task> findById(int id, int user_id) throws Exception{
         Optional<Task> task = repository.findById(id);
-        return task;
+        if(task.isPresent()){
+            if(task.get().getUser().getId()==user_id) return task;
+            else throw new Exception("WRONG USER ID");
+        }
+        else throw new Exception("NOT FOUND");
     }
 
     public List<Task> findAllByUser_id(int id){

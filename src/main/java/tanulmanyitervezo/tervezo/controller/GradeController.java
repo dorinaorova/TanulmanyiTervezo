@@ -25,42 +25,50 @@ public class GradeController {
     }
 
     @PostMapping("/addgrade/zh/{userId}")
-    public ResponseEntity<GradeZH> addGrade_ZH(@RequestBody GradeZH grade, @PathVariable("userId") int id){
+    public ResponseEntity<?> addGrade_ZH(@RequestBody GradeZH grade, @PathVariable("userId") int id){
         try {
             GradeZH newGrade = service.addGrade_ZH(grade, id);
             return new ResponseEntity<>(newGrade, HttpStatus.CREATED);
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található felhasználó");
         }
     }
 
     @PutMapping("/updategrade/zh/{id}")
-    public ResponseEntity<GradeZH> updateGrade_ZH(@RequestBody GradeZH grade, @PathVariable("id") int id){
+    public ResponseEntity<?> updateGrade_ZH(@RequestBody GradeZH grade, @PathVariable("id") int id){
         try{
             GradeZH updatedGrade = service.updateGrade_ZH(grade, id);
             return  new ResponseEntity<>(updatedGrade, HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található eredmény");
         }
     }
 
     @PostMapping("/addgrade/homework/{userId}")
-    public ResponseEntity<GradeHomework> addGrade_Homework(@RequestBody GradeHomework grade, @PathVariable("userId") int id){
+    public ResponseEntity<?> addGrade_Homework(@RequestBody GradeHomework grade, @PathVariable("userId") int id){
         try{
             GradeHomework newGrade = service.addGrade_Homework(grade, id);
             return  new ResponseEntity<>(newGrade, HttpStatus.CREATED);
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található felhasználó!");
         }
     }
 
     @PutMapping("/updategrade/homework/{id}")
-    public ResponseEntity<GradeHomework> updateGrade_Homework(@RequestBody GradeHomework grade, @PathVariable("id") int id){
+    public ResponseEntity<?> updateGrade_Homework(@RequestBody GradeHomework grade, @PathVariable("id") int id){
         try{
             GradeHomework updatedGrade = service.updateGrade_Homework(grade, id);
             return  new ResponseEntity<>(updatedGrade, HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található eredmény!");
         }
     }
 }

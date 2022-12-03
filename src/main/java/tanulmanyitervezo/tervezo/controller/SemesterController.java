@@ -40,12 +40,14 @@ public class SemesterController {
     }
 
     @PutMapping("/setcurrent/{id}")
-    public ResponseEntity<Semester> setCurrent(@PathVariable("id") int id){
+    public ResponseEntity<?> setCurrent(@PathVariable("id") int id){
         try {
             Semester current = service.setCurrent(id);
             return new ResponseEntity<>(current, HttpStatus.OK);
         }catch (Exception e){
-            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található félév");
         }
     }
 
@@ -68,12 +70,14 @@ public class SemesterController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Semester> update(@PathVariable("id") int id, @RequestBody Semester semester){
+    public ResponseEntity<?> update(@PathVariable("id") int id, @RequestBody Semester semester){
         try{
             Semester updated = service.update(id, semester);
             return  new ResponseEntity<>(updated, HttpStatus.OK);
         }catch (Exception e){
-            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található félév");
         }
     }
 

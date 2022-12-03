@@ -18,14 +18,14 @@ public class TimetableService {
     @Autowired
     StudentsSubjectService subjectService;
 
-    public List<TimetableResponseModel> findAllForDay(int studentId, String day){
+    public List<TimetableResponseModel> findAllForDay(int studentId, int day){
         ArrayList<TimetableResponseModel> timeTable = new ArrayList<>();
         List<Subject> subjects =  subjectService.findCurrentByStudent_id(studentId);
         if(subjects!=null) {
             for (Subject s : subjects) {
                 List<Period> periods = periodService.findBySubjectId(s.getId());
                 for (Period p : periods) {
-                    if (p.getDay().equals(day)) {
+                    if (p.getDay()==day) {
                         TimetableResponseModel timetableResponseModel = new TimetableResponseModel(
                                 s.getName(),
                                 p

@@ -4,16 +4,15 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalTime;
 
 @Entity
-public class Period implements Serializable {
+public class Period implements Comparable<Period> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable= false,updatable = false )
     private int id;
-    private String day;
+    private Integer day;
     private LocalTime start;
     private int length;
     private String type;
@@ -31,11 +30,11 @@ public class Period implements Serializable {
         this.id = id;
     }
 
-    public String getDay() {
+    public Integer getDay() {
         return day;
     }
 
-    public void setDay(String day) {
+    public void setDay(Integer day) {
         this.day = day;
     }
 
@@ -73,5 +72,10 @@ public class Period implements Serializable {
         this.type = type;
     }
 
+    @Override
+    public int compareTo(Period period){
+        if(getDay() == 0 || period.getDay()==0) return 0;
+        return getDay().compareTo(period.getDay());
+    }
 
 }

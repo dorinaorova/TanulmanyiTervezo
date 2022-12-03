@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -53,11 +52,10 @@ public class AuthController {
         return ResponseEntity.ok(new UserResponse(jwt,
                 userDetails.getId(),
                 role));
-
-        } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Hibás felhasználói adatok!");
         }
     }
 
@@ -66,9 +64,8 @@ public class AuthController {
         if (userService.existsByEmail(user)) {
             return ResponseEntity
                     .badRequest()
-                    .body("Error: Email is already in use!");
+                    .body("Ez az emailcím már használatban van!");
         }
-
 
         User newUser = userService.addUser(user);
 

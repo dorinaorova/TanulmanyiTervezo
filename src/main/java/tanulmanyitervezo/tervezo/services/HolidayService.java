@@ -27,30 +27,33 @@ public class HolidayService {
         return holidays;
     }
 
-    public List<Holiday> findByDate(int id){
-        Semester semester = semesterRepository.findById(id).get();
-        Date start = new Date(semester.getStart());
-        Date end = new Date(semester.getEnd());
-        List<Holiday> all = repository.findAll();
-        ArrayList<Holiday> holidays = new ArrayList<>();
+    public List<Holiday> findBySemester(int id) throws Exception {
+        Optional<Semester> semester = semesterRepository.findById(id);
+        if(semester.isPresent()) {
+            Date start = new Date(semester.get().getStart());
+            Date end = new Date(semester.get().getEnd());
+            List<Holiday> all = repository.findAll();
+            ArrayList<Holiday> holidays = new ArrayList<>();
 
-        for (Holiday h: all){
-            Date date = new Date(h.getDate());
-            if(betweenToDates(date, start, end)) holidays.add(h);
-            else if(h.isRepeating()){
-                Calendar cal = Calendar.getInstance();
-                cal.set(start.getYear(), date.getMonth(), date.getDay());
-                Date holidayDate = cal.getTime();
-                if(betweenToDates(holidayDate, start, end)) holidays.add(h);
-                else{
-                    cal.set(end.getYear(), date.getMonth(), date.getDay());
-                    holidayDate = cal.getTime();
-                    if(betweenToDates(holidayDate, start, end)) holidays.add(h);
+            for (Holiday h : all) {
+                Date date = new Date(h.getDate());
+                if (betweenToDates(date, start, end)) holidays.add(h);
+                else if (h.isRepeating()) {
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(start.getYear(), date.getMonth(), date.getDay());
+                    Date holidayDate = cal.getTime();
+                    if (betweenToDates(holidayDate, start, end)) holidays.add(h);
+                    else {
+                        cal.set(end.getYear(), date.getMonth(), date.getDay());
+                        holidayDate = cal.getTime();
+                        if (betweenToDates(holidayDate, start, end)) holidays.add(h);
+                    }
                 }
             }
+            Collections.sort(holidays);
+            return holidays;
         }
-        Collections.sort(holidays);
-        return holidays;
+        else throw new Exception("NOT FOUND");
     }
 
     public void deleteHoliday(int id) throws Exception {

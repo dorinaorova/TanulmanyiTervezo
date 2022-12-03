@@ -60,43 +60,47 @@ public class SubjectController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public  ResponseEntity deleteSubject(@PathVariable("id") long id){
+    public  ResponseEntity<?> deleteSubject(@PathVariable("id") long id){
         try{
             service.deleteSubject(id);
             return new ResponseEntity(HttpStatus.OK);
         }catch(Exception e){
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található tantárgy!");
         }
 
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Subject> updateSubject(@PathVariable("id") long id, @RequestBody Subject subj){
+    public ResponseEntity<?> updateSubject(@PathVariable("id") long id, @RequestBody Subject subj){
         try {
             Subject updateSubj = service.updateSubject(id, subj);
             return new ResponseEntity<>(updateSubj, HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található tantárgy!");
         }
     }
 
     @PostMapping("/addperiod/{id}")
-    public ResponseEntity<Period> addPeriod(@PathVariable("id") long id, @RequestBody Period period) {
+    public ResponseEntity<?> addPeriod(@PathVariable("id") long id, @RequestBody Period period) {
          try{
             Period newPeriod = periodService.addPeriod(period, id);
             return new ResponseEntity<>(newPeriod, HttpStatus.CREATED);
         }catch (Exception e){
-             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+             return ResponseEntity
+                     .badRequest()
+                     .body("Nem található tantárgy!");
          }
     }
 
     @GetMapping("/findallperiods/{id}")
     public ResponseEntity<List<Period>> findAllPeriod(@PathVariable("id") long id){
         List<Period> periods = periodService.findBySubjectId(id);
-        for(Period period: periods){
-            period.setSubject(null);
-        }
+        Collections.sort(periods);
         return new ResponseEntity<>(periods, HttpStatus.OK);
     }
     @DeleteMapping("/deleteperiod/{id}")
@@ -105,7 +109,9 @@ public class SubjectController {
             periodService.deletePeriod(id);
             return new ResponseEntity(HttpStatus.OK);
         }catch(Exception e){
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található tantárgy!");
         }
     }
 
@@ -125,16 +131,15 @@ public class SubjectController {
             zhService.deleteZH(id);
             return new ResponseEntity(HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található tantárgy!");
         }
     }
 
     @GetMapping("/findallzhforsubject/{id}")
     public ResponseEntity<List<ZH>> findAllZH_Subject(@PathVariable("id") long id){
         List<ZH> zhs = zhService.findBySubjectId(id);
-        for(ZH zh: zhs){
-            zh.setSubject(null);
-        }
         Collections.sort(zhs);
         return new ResponseEntity<>(zhs, HttpStatus.OK);
     }
@@ -142,29 +147,25 @@ public class SubjectController {
     @GetMapping("/findallzhforsemester/{semesterId}/{userId}")
     public ResponseEntity<List<ZH>> findAllZH_User(@PathVariable("userId") int userId, @PathVariable("semesterId") int semesterId){
         List<ZH> zhs = zhService.findByUserId(userId, semesterId);
-        for(ZH zh: zhs){
-            zh.setSubject(null);
-        }
         Collections.sort(zhs);
         return new ResponseEntity<>(zhs, HttpStatus.OK);
     }
 
     @PostMapping("/addhomework/{id}")
-    public ResponseEntity<Homework> addHomework(@PathVariable("id") long id, @RequestBody Homework homework){
+    public ResponseEntity<?> addHomework(@PathVariable("id") long id, @RequestBody Homework homework){
         try {
             Homework newHomework = homeworkService.addHomework(id, homework);
             return new ResponseEntity<>(newHomework, HttpStatus.CREATED);
         }catch (Exception e){
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található tantárgy!");
         }
     }
 
     @GetMapping("/findallhomework/{id}")
     public ResponseEntity<List<Homework>> findAllHomework(@PathVariable("id") long id){
         List<Homework> homeworks = homeworkService.findBySubjectId(id);
-        for(Homework homework: homeworks){
-            homework.setSubject(null);
-        }
         Collections.sort(homeworks);
         return new ResponseEntity<>(homeworks, HttpStatus.OK);
     }
@@ -175,9 +176,9 @@ public class SubjectController {
             homeworkService.deleteHomework(id);
             return new ResponseEntity(HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található tantárgy!");
         }
     }
-
-
 }

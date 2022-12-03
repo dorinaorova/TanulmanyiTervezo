@@ -23,10 +23,17 @@ public class HolidayController {
         return new ResponseEntity<>(holidays, HttpStatus.OK);
     }
 
-    @GetMapping("/findbydate/{id}")
-    public ResponseEntity<List<Holiday>> findByDate(@PathVariable("id") int id){
-        List<Holiday> holidays = service.findByDate(id);
-        return new ResponseEntity<>(holidays, HttpStatus.OK);
+    @GetMapping("/findbysemster/{id}")
+    public ResponseEntity<?> findBySemester(@PathVariable("id") int id){
+        try {
+            List<Holiday> holidays = service.findBySemester(id);
+            return new ResponseEntity<>(holidays, HttpStatus.OK);
+        }
+        catch(Exception e){
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található félév");
+        }
     }
 
     @PostMapping("add")
@@ -40,7 +47,9 @@ public class HolidayController {
             service.deleteHoliday(id);
             return new ResponseEntity(HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található ünnepnap");
         }
     }
     @GetMapping("/isholiday/{date}")

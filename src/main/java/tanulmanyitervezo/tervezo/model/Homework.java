@@ -15,7 +15,7 @@ public class Homework implements Comparable<Homework> {
     private int maxPoints;
     @Lob
     private String description;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Subject subject;

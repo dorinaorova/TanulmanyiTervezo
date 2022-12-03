@@ -24,7 +24,7 @@ public class StudentsSubject {
     private Semester semester;
 
     public StudentsSubject(){
-        this.subject= new ArrayList<>();
+        this.subject = new ArrayList<>();
     }
 
     public int getId() {

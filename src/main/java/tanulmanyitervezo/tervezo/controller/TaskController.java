@@ -18,12 +18,14 @@ public class TaskController {
     TaskService service;
 
     @PostMapping("/add/{id}")
-    public ResponseEntity<Task> add(@RequestBody Task task, @PathVariable("id") int id){
+    public ResponseEntity<?> add(@RequestBody Task task, @PathVariable("id") int id){
         try {
             Task newTask = service.addTask(task, id);
             return new ResponseEntity<>(newTask, HttpStatus.CREATED);
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található feladat!");
         }
     }
 
@@ -33,11 +35,17 @@ public class TaskController {
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
-    @GetMapping("/findbyid/{id}")
-    public ResponseEntity<Task> findById(@PathVariable("id") int id){
-        Optional<Task> task = service.findById(id);
-        return task.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
-
+    @GetMapping("/findbyid/{id}/{user_id}")
+    public ResponseEntity<?> findById(@PathVariable("id") int id, @PathVariable("user_id") int user_id){
+        try {
+            Optional<Task> task = service.findById(id, user_id);
+            return new ResponseEntity<>(task, HttpStatus.OK);
+        }
+        catch(Exception e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található felhasználó!");
+        }
     }
 
     @GetMapping("/findallbyuser/done/{id}")
@@ -53,22 +61,26 @@ public class TaskController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Task> update(@PathVariable("id") int id, @RequestBody Task task){
+    public ResponseEntity<?> update(@PathVariable("id") int id, @RequestBody Task task){
         try {
             Task updatedTask = service.updateTask(task, id);
             return new ResponseEntity<>(updatedTask, HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található feladat!");
         }
     }
 
     @PutMapping("/setdone/{id}")
-    public ResponseEntity<Task> setDone(@PathVariable("id") int id){
+    public ResponseEntity<?> setDone(@PathVariable("id") int id){
         try{
         Task updatedTask = service.setDoneTask(id);
             return new ResponseEntity<>(updatedTask, HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található feladat!");
         }
     }
 
@@ -78,7 +90,9 @@ public class TaskController {
             service.deleteTask(id);
             return new ResponseEntity(HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található feladat!");
         }
     }
 

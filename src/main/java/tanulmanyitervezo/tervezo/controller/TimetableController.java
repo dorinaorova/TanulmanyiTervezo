@@ -17,7 +17,7 @@ public class TimetableController {
     TimetableService service;
 
     @GetMapping("finddaily/{id}/{day}")
-    public ResponseEntity<List<TimetableResponseModel>> findDailyTimeTable(@PathVariable("id") int id, @PathVariable("day") String day){
+    public ResponseEntity<List<TimetableResponseModel>> findDailyTimeTable(@PathVariable("id") int id, @PathVariable("day") int day){
         List<TimetableResponseModel> timetable = service.findAllForDay(id, day);
         return new ResponseEntity<>(timetable, HttpStatus.OK);
     }

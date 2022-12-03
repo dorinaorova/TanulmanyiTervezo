@@ -31,12 +31,14 @@ public class StudentsSubjectController {
     }
 
     @PostMapping("/add/{id}")
-    public ResponseEntity<StudentsSubject> add(@RequestBody Subject subject, @PathVariable("id") int studentId){
+    public ResponseEntity<?> add(@RequestBody Subject subject, @PathVariable("id") int studentId){
         try {
             StudentsSubject newStudentsSubject = service.add(subject, studentId);
             return new ResponseEntity<>(newStudentsSubject, HttpStatus.CREATED);
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Nem található felhasználó");
         }
     }
 

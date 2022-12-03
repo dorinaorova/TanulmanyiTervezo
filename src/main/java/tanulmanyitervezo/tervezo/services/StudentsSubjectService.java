@@ -24,27 +24,27 @@ public class StudentsSubjectService {
     SemesterService semesterService;
 
     public StudentsSubject add(Subject subject,int id) throws Exception {
-        boolean findSS = false;
+        boolean findStudentSubject = false;
         StudentsSubject newStudentSubject = new StudentsSubject();
         List<StudentsSubject> studentsSubjects = repository.findAllByStudent_Id(id);
-        for(StudentsSubject ss: studentsSubjects){
-            if(ss.getSemester().isCurrent()){
+        for(StudentsSubject studentsSubject: studentsSubjects){
+            if(studentsSubject.getSemester().isCurrent()){
                 boolean subjectExist=false;
-                for(Subject s: ss.getSubject()){
+                for(Subject s: studentsSubject.getSubject()){
                     if (s.getId() == subject.getId()) {
                         subjectExist = true;
                         break;
                     }
                 }
                 if(!subjectExist) {
-                    ss.addSubject(subject);
+                    studentsSubject.addSubject(subject);
                 }
-                newStudentSubject=ss;
-                findSS = true;
+                newStudentSubject=studentsSubject;
+                findStudentSubject = true;
                 repository.save(newStudentSubject);
             }
         }
-        if(!findSS){
+        if(!findStudentSubject){
             Optional<User> student = userService.findById(id);
             if(student.isPresent()) {
                 Semester semester = semesterService.findCurrent();
@@ -60,9 +60,9 @@ public class StudentsSubjectService {
 
     public List<Subject> findSubjectsByStudent_id(int id, int semesterid){
         List<StudentsSubject> studentsSubjects = repository.findAllByStudent_Id(id);
-        for(StudentsSubject ss: studentsSubjects){
-            if(ss.getSemester().getId()==semesterid){
-                return ss.getSubject();
+        for(StudentsSubject studentsSubject: studentsSubjects){
+            if(studentsSubject.getSemester().getId()==semesterid){
+                return studentsSubject.getSubject();
             }
         }
         return null;
