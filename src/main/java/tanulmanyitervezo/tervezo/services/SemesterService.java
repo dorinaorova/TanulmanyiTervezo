@@ -53,7 +53,7 @@ public class SemesterService {
         Collections.sort(semesters);
         for(int i=0; i< semesters.size(); i++){
             if(semesters.get(i).getId()==id){
-                if(i< semesters.size()-1) {
+                if(i<semesters.size()-1) {
                     i++;
                     return semesters.get(i);
                 }

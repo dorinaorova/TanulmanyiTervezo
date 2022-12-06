@@ -1,7 +1,6 @@
 package tanulmanyitervezo.tervezo.security.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ public class MyUserDeatailsService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException{
+    public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String email) throws UsernameNotFoundException{
         Optional<User> user =  userRepository.findByEmail(email);
         user.orElseThrow(()-> new UsernameNotFoundException("Not found: "+email));
         return user.map(MyUserDetails::new).get();

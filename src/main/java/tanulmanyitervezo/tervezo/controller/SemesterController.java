@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import tanulmanyitervezo.tervezo.model.Semester;
 import tanulmanyitervezo.tervezo.services.SemesterService;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -19,13 +17,6 @@ public class SemesterController {
 
     @Autowired
     SemesterService service;
-
-    @GetMapping("/findall")
-    public ResponseEntity<List<Semester>> findAll(){
-        List<Semester> semesters = service.findAll();
-        Collections.sort(semesters);
-        return new ResponseEntity<>(semesters, HttpStatus.OK);
-    }
 
     @PostMapping("/add")
     public ResponseEntity<Semester> add(@RequestBody Semester semester){

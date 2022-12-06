@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User requestUser) throws Exception{
-
         try{
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(requestUser.getEmail(), requestUser.getPassword()));
@@ -46,12 +46,10 @@ public class AuthController {
 
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
         String role = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
+                .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList()).get(0);
 
-        return ResponseEntity.ok(new UserResponse(jwt,
-                userDetails.getId(),
-                role));
+        return new ResponseEntity<>(new UserResponse(jwt, userDetails.getId(), role), HttpStatus.OK);
         } catch (BadCredentialsException e) {
             return ResponseEntity
                     .badRequest()
@@ -60,7 +58,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody User user){
+    public ResponseEntity<?> signUp(@RequestBody User user){
         if (userService.existsByEmail(user)) {
             return ResponseEntity
                     .badRequest()
