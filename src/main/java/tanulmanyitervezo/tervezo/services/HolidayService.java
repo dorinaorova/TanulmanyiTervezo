@@ -37,16 +37,16 @@ public class HolidayService {
 
             for (Holiday h : all) {
                 Date date = new Date(h.getDate());
-                if (betweenToDates(date, start, end)) holidays.add(h);
+                if (betweenDates(date, start, end)) holidays.add(h);
                 else if (h.isRepeating()) {
                     Calendar cal = Calendar.getInstance();
                     cal.set(start.getYear(), date.getMonth(), date.getDay());
                     Date holidayDate = cal.getTime();
-                    if (betweenToDates(holidayDate, start, end)) holidays.add(h);
+                    if (betweenDates(holidayDate, start, end)) holidays.add(h);
                     else {
                         cal.set(end.getYear(), date.getMonth(), date.getDay());
                         holidayDate = cal.getTime();
-                        if (betweenToDates(holidayDate, start, end)) holidays.add(h);
+                        if (betweenDates(holidayDate, start, end)) holidays.add(h);
                     }
                 }
             }
@@ -64,7 +64,7 @@ public class HolidayService {
         }
     }
 
-    private boolean betweenToDates(Date holiday, Date start, Date end){
+    private boolean betweenDates(Date holiday, Date start, Date end){
         if(holiday.after(start) && holiday.before(end)) return true;
         else return false;
     }

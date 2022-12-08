@@ -14,7 +14,7 @@ public class JwtUtils {
 
     private final String jwtSecret ="tervezo";
 
-    private final int jwtExpirationMs = 5 * 60 * 60;
+    private final int jwtExpirationMs = 180000000;
 
     public String generateJwtToken(Authentication authentication) {
         MyUserDetails userPrincipal = (MyUserDetails) authentication.getPrincipal();

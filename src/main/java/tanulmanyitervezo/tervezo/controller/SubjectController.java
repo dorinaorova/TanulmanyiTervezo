@@ -56,7 +56,6 @@ public class SubjectController {
     public  ResponseEntity<Subject> addSubject(@RequestBody Subject newSubject){
         Subject subject = service.addSubject(newSubject);
         return new ResponseEntity<>(subject, HttpStatus.CREATED);
-
     }
 
     @DeleteMapping("/delete/{id}")
